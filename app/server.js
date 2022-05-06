@@ -1,3 +1,5 @@
+const { allRouter } = require("./router/router");
+
 module.exports = class Application {
   #express = require("express");
   #app = this.#express();
@@ -5,6 +7,7 @@ module.exports = class Application {
     this.configAplications();
     this.creatServer(PORT);
     this.configDataBase(DB_URL);
+    this.creatRouter()
     this.errorHandeling();
   }
   configAplications() {
@@ -42,11 +45,12 @@ module.exports = class Application {
       });
     });
   }
-  creatRouter(){
-      this.#app.get("/" , (req,res)=>{
-          return res.json({
-              message:"Hello World"
-          })
-      })
+  creatRouter() {
+    this.#app.get("/", (req, res) => {
+      return res.json({
+        message: "Home page",
+      });
+    });
+    this.#app.use(allRouter);
   }
-}
+};
