@@ -3,8 +3,7 @@ const { expressValidatorMapper } = require('../middleware/checkErrorValidator');
 class AuthController {
   register(req, res, next) {
     const { username, mobile, email, password } = req.body;
-    const result = validationResult(req);
-    return res.json(result);
+    return res.json(req.body);
   }
   login() {}
   resetPassword() {}

@@ -1,10 +1,11 @@
 ###register
-Post http://localhost:3000/auth/register 
+Post http://localhost:3000/auth/register
+Content-Type: application/json
 
 {
-    "username" : "",
-    "email" : "",
-    "password" : "",
-    "mobile" : "",
-    "confirm_password" : ""
+    "username":"sadeghism",
+    "email":"sadeghism@yahoo.com",
+    "mobile":"09902775326",
+    "password":"123456789",
+    "confirm_password":"123456789"
 }
