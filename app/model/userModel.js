@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model,Types } = require("mongoose");
 const User = new Schema({
   firts_name: { type: String },
   last_name: { type: String },
@@ -6,9 +6,9 @@ const User = new Schema({
   email: { type: String, required: true, unique: true },
   mobile: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  rols: { type: String, default: ["USER"] },
-  skills : {type:String , default:[]},
-  teams : {type:String , default:[]}
+  rols: { type: [String], default: ["USER"] },
+  skills : {type:[String] , default:[]},
+  teams : {type:[Types.ObjectId] , default:[]}
 }, {
     timestamps:true
 });
