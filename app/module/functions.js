@@ -11,9 +11,16 @@ function tokenGenerator(payload) {
     expiresIn: "365 days",
   });
   return token;
+};
+
+function verifyTokenJwt(token){
+  const result = jwt.verify(token , process.env.SECRET_KEY , {password:0});
+  if(!result?.username) throw {status:401 , message:"لطفا وارد حساب کاربری خود شوید"}
+  return result
 }
 
 module.exports = {
   hashPassword,
   tokenGenerator,
+  verifyTokenJwt
 };
