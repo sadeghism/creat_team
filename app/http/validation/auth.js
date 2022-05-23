@@ -6,7 +6,7 @@ function registerValidation() {
     body("username").custom(async (username, ctx) => {
       if (username) {
         const usernameRegex = /^[a-z]+[a-z0-9\_\.]{2,}/gi;
-        if (!usernameRegex.test(username)) {
+        if (usernameRegex.test(username)) {
           const existUsername = await UserModel.findOne({ username });
           if (existUsername) throw "نام کاربری موجود میباشد";
           return true;
@@ -43,6 +43,28 @@ function registerValidation() {
   ];
 }
 
+function loginValidaitons() {
+  return [
+    body("username")
+      .notEmpty()
+      .withMessage("فیلد نمیتواند خالی باشد")
+      .custom(async (username) => {
+        const usernameRegex = /^[a-z]+[a-z0-9\_\.]{2,}/gi;
+        if (usernameRegex.test(username)) {
+          const existUsername = await UserModel.findOne({ username });
+          if (!existUsername)
+            throw "تام کاربری یا رمز عبور اشتباه وارد شده است";
+          return true;
+        }
+        throw "نام کاربری اشتباه می باشد";
+      }),
+    body("password")
+      .isLength({ min: 6, max: 64 })
+      .withMessage("حداکثر 64 کاراکتر و حداقل 6 کاراکتر"),
+  ];
+}
+
 module.exports = {
   registerValidation,
+  loginValidaitons,
 };
