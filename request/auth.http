@@ -3,7 +3,7 @@ Post http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "username":"sadeghisms",
+    "username":"sadeghims",
     "email":"sadeghism@yahoo.com",
     "mobile":"09902875296",
     "password":"123456789",
@@ -16,6 +16,6 @@ Content-Type: application/json
 Authorization: {{$dotenv SECRET_KEY}}
 
 {
-    "username":"sadeghisms",
+    "username":"sadeghims",
     "password":"123456789"
 }

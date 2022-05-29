@@ -9,5 +9,6 @@ Content-Type: application/json
 
 {
     "firts_name":"hossein",
-    "last_name":"sadeghi"
+    "last_name":"sadeghi",
+    "skills":[""]
 }
