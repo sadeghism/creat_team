@@ -6,7 +6,7 @@ const User = new Schema(
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     mobile: { type: String, required: true, unique: true },
-    profile_image:{type:String},
+    profile_image: { type: String },
     password: { type: String, required: true },
     rols: { type: [String], default: ["USER"] },
     skills: { type: [String], default: [] },

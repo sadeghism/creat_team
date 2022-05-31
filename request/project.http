@@ -1,0 +1,9 @@
+###creat Project
+Post http://localhost:3000/project/creat
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+{
+    "title":"mohammad",
+    "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+}

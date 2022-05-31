@@ -4,15 +4,16 @@ const {
   expressValidatorMapper,
 } = require("../http/middleware/checkErrorValidator");
 const { validationImage } = require("../http/validation/user");
-const { upload } = require("../module/multer");
+const { multerFile, addressFileForUpload } = require("../module/multer");
 
 const router = require("express").Router();
+const resultAddress = addressFileForUpload(__dirname , ".." , "..",".." , "public", "upload" ,"img");
 
 router.get("/profile", autoLogin, UserController.getProfile);
 router.post("/profile", autoLogin, UserController.editProfile);
 router.post(
   "/profile_image",
-  upload.single("image"),
+  multerFile(resultAddress , "img").single("image"),
   autoLogin,
   validationImage(),
   expressValidatorMapper,
