@@ -1,12 +1,10 @@
 const { ProjectModel } = require("../../model/projectModel");
-const fs = require('fs');
+const fs = require("fs");
 
 class ProjectController {
   async creatProject(req, res, next) {
     try {
-      const { title, text } = req.body;
-      const image = req.file?.path.substring(7);
-      console.log(req.file);
+      const { title, text, image } = req.body;
       const owner = req.user._id;
       const result = await ProjectModel.create({ title, text, owner, image });
       if (!result)

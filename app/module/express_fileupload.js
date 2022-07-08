@@ -12,7 +12,7 @@ const uploadFile = async (req, res, next) => {
       "uploads",
       "img",
       "project",
-      shortId.new()
+      shortId.new() + path.extname(image.name)
     );
     req.body.image = imageAdress;
     let addressFile = path.join(__dirname, "..", "..", imageAdress);

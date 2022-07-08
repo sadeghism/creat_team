@@ -6,6 +6,7 @@ const Project = new Schema(
     image: { type: String, default: "/default/default.png" },
     owner: { type: Types.ObjectId, required: true },
     private: { type: Boolean, default: true },
+    tags:{Types:[String]}
   },
   {
     timestamps: true,
