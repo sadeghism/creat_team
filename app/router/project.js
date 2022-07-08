@@ -6,9 +6,10 @@ const {
 const { multerValidation } = require("../http/validation/multerValidation");
 const { validaitonProject } = require("../http/validation/project");
 const { uploadFile } = require("../module/express_fileupload");
-const fileUpload = require('express-fileupload');
+const fileUpload = require("express-fileupload");
 
 const router = require("express").Router();
+router.get("/projects",autoLogin,ProjectController.getAllProject);
 
 router.post(
   "/creat",

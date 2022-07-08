@@ -20,7 +20,8 @@ class ProjectController {
   }
   async getAllProject(req, res, next) {
     try {
-      const result = await ProjectModel.find();
+      const owner = req.user._id;
+      const result = await ProjectModel.find({ owner });
       return res.status(200).json({
         status: 200,
         success: true,
