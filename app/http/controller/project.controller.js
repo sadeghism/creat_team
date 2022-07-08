@@ -1,11 +1,14 @@
 const { ProjectModel } = require("../../model/projectModel");
+const fs = require('fs');
 
 class ProjectController {
   async creatProject(req, res, next) {
     try {
       const { title, text } = req.body;
+      const image = req.file?.path.substring(7);
+      console.log(req.file);
       const owner = req.user._id;
-      const result = await ProjectModel.create({ title, text, owner });
+      const result = await ProjectModel.create({ title, text, owner, image });
       if (!result)
         throw { status: 400, message: "ساخت پروژه با مشکل مواجه شد" };
       return res.status(201).json({
@@ -27,7 +30,7 @@ class ProjectController {
         result,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   getAllProjectOfTeam() {}

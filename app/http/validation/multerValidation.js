@@ -2,7 +2,7 @@ const { body } = require("express-validator");
 const path = require("path");
 const fs = require('fs');
 
-function validationImage() {
+function multerValidation() {
   return [
     body("image").custom((image, { req }) => {
       if (!req.file) throw "عکسی انتخاب کنید";
@@ -24,5 +24,5 @@ function validationImage() {
 }
 
 module.exports = {
-  validationImage,
+  multerValidation,
 };

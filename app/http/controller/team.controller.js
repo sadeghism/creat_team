@@ -1,9 +1,11 @@
+const { TeamsModel } = require("../../model/teamModel");
+
 class TeamController {
-  creatTeam() {}
-  inviteUserById() {}
-  removeTeamById() {}
-  updateTeam() {}
-  removeUserOfTeam() {}
+  async creatTeam(req, res, next) {}
+  async inviteUserById() {}
+  async removeTeamById() {}
+  async updateTeam() {}
+  async removeUserOfTeam() {}
 }
 
 module.exports = {

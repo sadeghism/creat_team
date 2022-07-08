@@ -22,17 +22,14 @@ class UserController {
       const kayForEditProfile = ["firts_name", "last_name", "skills"];
       const badValue = ["", " ", NaN, null, undefined, {}, []];
       Object.entries(data).forEach(([kay, value]) => {
-        // console.log(data);
         if (!kayForEditProfile.includes(kay)) delete data[kay];
         if (badValue.includes(value)) delete data[kay];
-        // console.log(data);
       });
       let validationSkill;
       if (data.skills) {
         if (data.skills.length == 0) delete data.skills;
         data.skills.forEach((e) => {
           validationSkill = badValue.includes(e);
-          console.log(validationSkill);
         });
         if (validationSkill) delete data.skills;
       }

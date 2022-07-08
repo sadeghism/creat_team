@@ -3,7 +3,8 @@ const { autoLogin } = require("../http/middleware/autoLogin");
 const {
   expressValidatorMapper,
 } = require("../http/middleware/checkErrorValidator");
-const { validationImage } = require("../http/validation/user");
+const { multerValidation } = require("../http/validation/multerValidation");
+const { validaitonProject } = require("../http/validation/project");
 const { multerFile, addressFileForUpload } = require("../module/multer");
 
 const router = require("express").Router();
@@ -15,7 +16,8 @@ router.post(
   "/profile_image",
   multerFile(resultAddress , "img").single("image"),
   autoLogin,
-  validationImage(),
+  multerValidation(),
+  validaitonProject(),
   expressValidatorMapper,
   UserController.uploadImageProfile
 );
