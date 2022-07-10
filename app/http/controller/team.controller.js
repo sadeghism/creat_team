@@ -33,9 +33,56 @@ class TeamController {
       next(error);
     }
   }
-  async inviteUserById(req, res, next) {}
+  async getTeamById(req, res, next) {
+    try {
+      const idTeam = req.params.id;
+      const result = await TeamsModel.findById(idTeam);
+      if (!result) throw { status: 404, message: "همچین تیمی وجود ندارد" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getMyTeam(req, res, next) {
+    try {
+      const userId = req.user._id;
+      const result = await TeamsModel.find({
+        $or: [{ owner: userId }, { users: userId }],
+      });
+      if (!result)
+        throw { status: 404, message: "شما در هیچ تیمی عضو نمی باشید" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async inviteUserById(req, res, next) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
   async removeTeamById(req, res, next) {
     try {
+      const teamId = req.params.id;
+      const existTeam = await TeamsModel.findOne({ _id: teamId });
+      if (!existTeam) throw { status: 404, message: "تیمی یافت نشد" };
+      const result = await TeamsModel.deleteOne({ _id: teamId });
+      if (result.deletedCount === 0)
+        throw { status: 500, message: "خطایی رخ داده است" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        result,
+      });
     } catch (error) {
       next(error);
     }
