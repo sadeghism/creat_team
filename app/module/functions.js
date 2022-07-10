@@ -12,7 +12,9 @@ function tokenGenerator(payload) {
   });
   return token;
 };
-
+function createLink(req , link){
+  return "://" + req.get("host") + "/" +(link).replace(/[\\\\]/gm , "/")
+}
 function verifyTokenJwt(token){
   const result = jwt.verify(token , process.env.SECRET_KEY , {password:0});
   if(!result?.username) throw {status:401 , message:"لطفا وارد حساب کاربری خود شوید"}
@@ -22,5 +24,6 @@ function verifyTokenJwt(token){
 module.exports = {
   hashPassword,
   tokenGenerator,
-  verifyTokenJwt
+  verifyTokenJwt,
+  createLink
 };
