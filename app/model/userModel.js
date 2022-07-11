@@ -1,4 +1,12 @@
 const { Schema, model, Types } = require("mongoose");
+
+const inviteRequestsUser = new Schema({
+  teamId: { type: Types.ObjectId, required: true },
+  caller: { type: String, required: true, lowercase: true },
+  requireDate: { type: Date, default: new Date() },
+  status: { type: String, default: "pending" }, //pending , rejected , accepted
+});
+
 const User = new Schema(
   {
     firts_name: { type: String },
@@ -12,11 +20,14 @@ const User = new Schema(
     skills: { type: [String], default: [] },
     teams: { type: [Types.ObjectId], default: [] },
     token: { type: String, default: "" },
+    inviteRequests: { type: [inviteRequestsUser] },
   },
   {
     timestamps: true,
   }
 );
+
+
 
 const UserModel = model("user", User);
 module.exports = {

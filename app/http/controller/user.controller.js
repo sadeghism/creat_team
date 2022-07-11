@@ -5,8 +5,7 @@ class UserController {
   getProfile(req, res, next) {
     try {
       const user = req.user;
-      user.profile_image =
-        req.protocol + createLink(req,user.profile_image)
+      user.profile_image = req.protocol + createLink(req, user.profile_image);
       return res.status(200).json({
         status: 200,
         success: true,
@@ -65,10 +64,95 @@ class UserController {
       next(error);
     }
   }
-  addSkill() {}
-  editSkill() {}
-  acceptInvitInTeam() {}
-  rejectInvitInTeam() {}
+  async getAllInvite(req, res, next) {
+    try {
+      const userId = req.user._id;
+      const { inviteRequests } = await UserModel.findById(userId, {
+        inviteRequests: 1,
+      });
+      if (inviteRequests.length === 0)
+        throw { status: 404, message: "هیچ در خواستی برای شما وجود ندارد" };
+      return res.status(200).json({
+        request: inviteRequests,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async statusInviteRequest(req, res, next) {
+    try {
+      const { status } = req.params;
+      const userId = req.user._id;
+      const inviteRequests = await UserModel.aggregate([
+        { $match: { _id: userId } },
+        {
+          $project: {
+            _id: 0,
+            inviteRequests: 1,
+            inviteRequests: {
+              $filter: {
+                input: "$inviteRequests",
+                as: "request",
+                cond: {
+                  $eq: ["$$request.status", status],
+                },
+              },
+            },
+          },
+        },
+      ]);
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        request: inviteRequests,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async changeStatus(req, res, next) {
+    try {
+      const { id, status } = req.params;
+      const request = await UserModel.findOne({ "inviteRequests._id": id });
+      if (!request)
+        throw { status: 404, message: "درخواستی با این مشخصات پیدا نشد" };
+      const findRequest = request.inviteRequests.find((item) => item._id == id);
+      if (!["accepted", "rejected"].includes(status))
+        throw { status: 400, message: "اطلاعات درخواست درست نمی باشد" };
+      if (findRequest.status !== "pending")
+        throw { status: 400, message: "درخواست قبلا رد یا پذیرفته شده است" };
+      const result = await UserModel.updateOne(
+        { "inviteRequests._id": id },
+        {
+          $set: { "initeRequest.$.status": status },
+        }
+      );
+      if (result.modifiedCount === 0)
+        throw {
+          status: 500,
+          message: "خطایی در رد یا قبول درخواست به وجود آمد",
+        };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "درخواست با رد یا قبول شد",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  addSkill(req, res, next) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
+  editSkill(req, res, next) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = {

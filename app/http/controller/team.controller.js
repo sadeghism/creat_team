@@ -1,6 +1,11 @@
+const autoBind = require("auto-bind");
 const { TeamsModel } = require("../../model/teamModel");
+const { UserModel } = require("../../model/userModel");
 
 class TeamController {
+  constructor() {
+    autoBind(this);
+  }
   async creatTeam(req, res, next) {
     try {
       const { name, description, idName } = req.body;
@@ -64,8 +69,46 @@ class TeamController {
       next(error);
     }
   }
+  async findTeam(teamId, userId) {
+    const result = await TeamsModel.findOne({
+      $or: [{ owner: userId }, { _id: teamId }],
+    });
+    return !!result;
+  }
   async inviteUserById(req, res, next) {
     try {
+      const { teamId, username } = req.params;
+      const team = await this.findTeam(teamId, username);
+      if (!team) throw { status: 404, message: "تیمی برای دعوت وجود ندارد" };
+      const user = await UserModel.findOne({ _id: username });
+      if (!user) throw { status: 404, message: "همچین کاربری وجود ندارد" };
+      const UserInvite = await this.findTeam(teamId, user._id);
+      if (UserInvite)
+        throw { status: 400, message: "کاربر قبلا دعوت شده است به تیم" };
+      const requst = {
+        caller: req.user._id,
+        requireDate: new Date(),
+        status: "pading",
+        teamId,
+      };
+      const updateInviteRequests = await TeamsModel.updateOne(
+        { username },
+        {
+          $push: {
+            inviteRequests: requst,
+          },
+        }
+      );
+      if (updateInviteRequests.modifiedCount === 0)
+        throw {
+          status: 500,
+          message: "ثبت درخواست انجام نشد دوباره تلاش کنید",
+        };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "درخواست ارسال شد ",
+      });
     } catch (error) {
       next(error);
     }

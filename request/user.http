@@ -1,6 +1,9 @@
 ###get user profile
 GET  http://localhost:3000/user/profile
 Authorization: Bearer {{$dotenv token}}
+###get all request join to team
+GET  http://localhost:3000/user/request
+Authorization: Bearer {{$dotenv token}}
 
 ###edit user profile
 POST   http://localhost:3000/user/profile

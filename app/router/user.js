@@ -21,7 +21,7 @@ router.post(
   expressValidatorMapper,
   UserController.uploadImageProfile
 );
-
+router.get("/request" , autoLogin , UserController.getAllInvite)
 module.exports = {
   userRouter: router,
 };
