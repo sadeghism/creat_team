@@ -55,9 +55,22 @@ class TeamController {
   async getMyTeam(req, res, next) {
     try {
       const userId = req.user._id;
-      const result = await TeamsModel.find({
-        $or: [{ owner: userId }, { users: userId }],
-      });
+      const result = await TeamsModel.aggregate([
+        {
+          $match: { $or: [{ owner: userId }, { users: userId }] },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+        {
+          $unwind: "owner",
+        },
+      ]);
       if (!result)
         throw { status: 404, message: "شما در هیچ تیمی عضو نمی باشید" };
       return res.status(200).json({
@@ -126,18 +139,6 @@ class TeamController {
         success: true,
         result,
       });
-    } catch (error) {
-      next(error);
-    }
-  }
-  async updateTeam(req, res, next) {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  }
-  async removeUserOfTeam(req, res, next) {
-    try {
     } catch (error) {
       next(error);
     }

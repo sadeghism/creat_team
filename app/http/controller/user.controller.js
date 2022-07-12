@@ -1,6 +1,6 @@
 const { UserModel } = require("../../model/userModel");
 const { createLink } = require("../../module/functions");
-
+const TeamsModel = require("../../model/teamModel");
 class UserController {
   getProfile(req, res, next) {
     try {
@@ -135,20 +135,34 @@ class UserController {
       return res.status(200).json({
         status: 200,
         success: true,
-        message: "درخواست با رد یا قبول شد",
+        message: "درخواست رد یا قبول شد",
       });
     } catch (error) {
       next(error);
     }
   }
-  addSkill(req, res, next) {
+  async updateTeam(req, res, next) {
     try {
-    } catch (error) {
-      next(error);
-    }
-  }
-  editSkill(req, res, next) {
-    try {
+      const data = req.body;
+      const { teamId } = req.params;
+      const userId = req.user._id;
+      Object.keys(data).forEach((key) => {
+        if (!data[key]) delete data[key];
+        if (["", " ", null, undefined, 0].includes(data[key])) delete data[key];
+      });
+      const team = await TeamsModel.findOne({ _id: teamId, owner: userId });
+      if (!team) throw { status: 404, message: "تیمی با این مشخصات پیدا نشد" };
+      const result = await TeamsModel.updateOne(
+        { _id: teamId },
+        { $set: data }
+      );
+      if (result.modifiedCount === 0)
+        throw { status: 500, message: "مشخصات تیم آپدیت نشد" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "مشخصات تیم آپدیت شد",
+      });
     } catch (error) {
       next(error);
     }
